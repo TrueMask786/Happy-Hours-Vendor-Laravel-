@@ -21,6 +21,6 @@ Route::get('/','pagesController@indexPage');
 
 Route::get('/addListing', 'addListingController@showAddlistingForm');
 
-Route::post('/addListing','addListingController@store');
+Route::post('/addListing','addListingController@addListing');
 
 

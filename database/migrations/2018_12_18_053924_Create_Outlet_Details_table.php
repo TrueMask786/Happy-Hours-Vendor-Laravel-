@@ -11,27 +11,28 @@ class CreateOutletDetailsTable extends Migration
     public function up()
     {
         Schema::connection('mysql1')->create('outletDetails', function (Blueprint $table) {
-            $table->string('merchant_id',8)->unique();
+            $table->string('merchant_id',8);
             $table->primary('merchant_id');
-            $table->string('outletName',40);
-            $table->text('description')->nullable();
-            $table->string('website',100)->nullable();
-            $table->json('address')->nullable();
-            $table->string('city',20);
+            $table->foreign('merchant_id')->references('merchant_id')->on('users');
+            $table->string('outletName',30);
+            $table->text('description');
+            $table->string('website',40)->nullable();
+            $table->string('address');
+            $table->string('city',25);
             $table->string('pincode',6);
             $table->decimal('latitude',10,6);
             $table->decimal('longitude',10,6);
             $table->string('email')->unique();
-            $table->char('extension',4);
             $table->string('phone',10)->unique();
-           // $table->string('outletType',30);
             $table->enum('outletType',['Restaurant','Bar','Restaurant and Bar','Takeaway']);
-            $table->json('cuisine')->nullable();
+            $table->string('tags')->nullable();
+            $table->string('cuisine');
             $table->enum('foodType',['Veg','Non-Veg','Both']);
-            $table->char('openTimeWD',2);
-            $table->char('closeTimeWD',2);
-            $table->char('openTimeWE',2);
-            $table->char('closeTimeWE',2);            
+            $table->string('openTimeWD',10);
+            $table->string('closeTimeWD',10);
+            $table->string('openTimeWE',10);
+            $table->string('closeTimeWE',10);  
+            $table->boolean('activated')->default(false);          
             $table->timestamps();
 
         });

@@ -50,11 +50,16 @@
 </head>
 
 <body>
-    <!--============================= HEADER =============================-->
-   
- 
 
-    <!--============================= SUBPAGE HEADER BG =============================-->
+  
+  @foreach($errors->all() as $error)
+  {
+    <span class="help-block">
+          <strong>{{ $error}}</strong>
+     </span>
+  }
+  @endforeach
+    <!--============================= SUBPAGE HEADER =============================-->
     <section class="subpage-bg">
         <div class="container-fluid">
             <div class="row justify-content-center">
@@ -67,7 +72,8 @@
             </div>
         </div>
     </section>
-    <!--// SUBPAGE HEADER BG -->
+    <!--// SUBPAGE HEADER-->
+
     <!--============================= ADD LISTING =============================-->
     <section class="main-block">
         <div class="container-fluid">
@@ -85,16 +91,29 @@
 
 
                             <div class="row">
+
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                  <div class="form-group {{$errors->has('outletName') ? 'has-error': '' }}">
                                         <label>Outlet Name</label>
-                                        <input type="text" required maxlength="35" id="outletName" name="outletName" placeholder="Your Restaurant's name"class="form-control add-listing_form" >
+                                        <input type="text" id="outletName" name="outletName" placeholder="Your Restaurant's name"class="form-control add-listing_form" required>
+
+                                           @if ($errors->has('outletName'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('outletName') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                 </div>
+
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{$errors->has('logoImg') ? 'has-error': '' }}">
                                         <label>Logo</label>
                                        <div><input type="file" required id="logoImg" name="logoImg"> </div>
+                                           @if ($errors->has('logoImg'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('logoImg') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                 </div>
                             </div>
@@ -103,15 +122,25 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{$errors->has('description') ? 'has-error': '' }} ">
                                         <label>Description</label>
-                                        <input type="text" maxlength="100" id="description" name="description" placeholder="What is so special about you?" class="form-control add-listing_form" >
+                                        <input type="text" id="description" name="description" placeholder="What is so special about you?" class="form-control add-listing_form" required>
+                                           @if ($errors->has('description'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('description') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{$errors->has('website') ? 'has-error': '' }} ">
                                         <label>Website</label>
-                                        <input type="url" maxlength="30" id="website" name="website" class="form-control add-listing_form" placeholder="Do you have any website?">
+                                        <input type="url" id="website" name="website" class="form-control add-listing_form" placeholder="Do you have any website?">
+                                           @if ($errors->has('website'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('website') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                 </div>
 
@@ -129,26 +158,36 @@
                              <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Address</label>
-                                        <input type="text" id="address" name="address" placeholder="Restaurant's full address" required maxlength="60"  class="form-control add-listing_form" onchange="addresstoCordinates(value)" />
+                                        <input type="text" id="address" name="address" placeholder="Restaurant's full address" required class="form-control add-listing_form" onchange="addresstoCordinates(value)" />
                                     </div>
                                 </div>
                              <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{$errors->has('city') ? 'has-error': '' }} ">
                                         <label>City</label>
                                         <input type="text" maxlength="25" id="city" name="city" placeholder="City or Town name" required class="form-control add-listing_form">
+                                           @if ($errors->has('city'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('city') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                 </div>
                             
                                  <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{$errors->has('pincode') ? 'has-error': '' }}">
                                         <label>Pincode</label>
-                                        <input type="number" max="999999" id="pincode" name="pincode" placeholder="6-digit pincode" required class="form-control add-listing_form">
+                                        <input type="number" id="pincode" name="pincode" placeholder="6-digit pincode" required class="form-control add-listing_form">
+                                           @if ($errors->has('pincode'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('pincode') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                  </div>
                                  <div>
-                                     <input type="hidden" id="latitude" name="latitude">
-                                     <input type="hidden" id="longitude" name="longitude">
+                                     <input type="hidden" id="latitude" name="latitude" value="19.217">
+                                     <input type="hidden" id="longitude" name="longitude" value="78.225">
                                  </div> 
 
                             </div>
@@ -237,6 +276,7 @@
                                     .then(function(response)
                                     {                                       
                                       saveData(response);
+                                      console.log(response);
                                     })
                                     .catch(function(error)
                                     {
@@ -275,31 +315,51 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{$errors->has('ownerName') ? 'has-error': '' }}">
                                         <label>Owner Name</label>
-                                        <input type="text" id="ownerName" name="ownerName" maxlength="30"
+                                        <input type="text" id="ownerName" name="ownerName"
                                          required class="form-control add-listing_form">
+                                            @if ($errors->has('ownerName'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('ownerName') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{$errors->has('ownerEmail') ? 'has-error': '' }}">
                                         <label>Email</label>
-                                        <input type="email" id="ownerEmail" name="ownerEmail" required maxlength="40" class="form-control add-listing_form">
+                                        <input type="email" id="ownerEmail" name="ownerEmail" required class="form-control add-listing_form">
+                                           @if ($errors->has('ownerEmail'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('ownerEmail') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{$errors->has('ownerPhone') ? 'has-error': '' }}">
                                         <label>Phone</label>
-                                        <input type="number" id="ownerPhone" name="ownerPhone" required class="form-control add-listing_form" max="9999999999" />
+                                        <input type="number" id="ownerPhone" name="ownerPhone" required class="form-control add-listing_form">
+                                           @if ($errors->has('ownerPhone'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('ownerPhone') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{$errors->has('company') ? 'has-error': '' }}">
                                         <label>Company</label>
-                                        <input type="text" id="company" name="company" maxlength="30" class="form-control add-listing_form">
+                                        <input type="text" id="company" name="company" class="form-control add-listing_form" required>
+                                           @if ($errors->has('company'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('company') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                 </div>
                             </div>
@@ -317,44 +377,106 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
+                                        <label>Cuisines</label>
+                                        <select onchange="selectCuisine(this);" class="form-control add-listing_form" required >
+                                            <option value="" selected>Select Cuisines</option>
+                                            @foreach ($cuisines as  $cuisine) 
+                                                { 
+                                                 <option value="{{$cuisine}}">{{$cuisine}}</option>
+                                                }
+                                            @endforeach                                                  
+                                        </select>
+                                     </div>
+                                 </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
                                         <label>Outlet Type</label>
                                         <select id="outletType" name="outletType" class="form-control add-listing_form" required>
-                                            <option selected>{{$outletTypes[0]}}</option>
-                                            <option>{{$outletTypes[1]}}</option>
-                                            <option>{{$outletTypes[2]}}</option>
+                                            <option value="" selected>Select Option</option>
+                                            @foreach ($outletTypes as  $outletType) 
+                                                { 
+                                                 <option value="{{$outletType}}">{{$outletType}}</option>
+                                                }
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Cuisine</label>
-                                        <input type="text" id="cuisine" name="cuisine" maxlength="100" class="form-control add-listing_form" placeholder="eg: Italian, South-Indian, North-Indian" required>
-                                    </div>
-                                </div>
+                             </div>
+
+                             <div class="row">
+                                <ul id="cuisinesList">
+
+                                </ul>
                             </div>
+
+
+                            <script>
+
+                              function selectCuisine(select)
+                                {
+                                  var option = select.options[select.selectedIndex];
+                                  var ul = document.getElementById('cuisinesList');
+                                     
+                                  var choices = ul.getElementsByTagName('input');
+                                  for (var i = 0; i < choices.length; i++)
+                                    if (choices[i].value == option.value)
+                                      return;
+                                     
+                                  var li = document.createElement('li');
+                                  var input = document.createElement('input');
+                                  var text = document.createTextNode(option.firstChild.data);
+                                     
+                                  input.type = "hidden";
+                                  input.name = "cuisinesInputArray[]";
+                                  input.value = option.value;
+
+                                  li.appendChild(input);
+                                  li.appendChild(text);
+                                  li.setAttribute('onclick', 'this.parentNode.removeChild(this);');     
+                                    
+                                  ul.appendChild(li);
+                                }
+                            </script>
+
+
                             <div class="row">
                                  <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{$errors->has('outletEmail') ? 'has-error': '' }}">
                                         <label>Email</label>
                                         <input type="email" id="outletEmail" name="outletEmail" maxlength="40" required class="form-control add-listing_form">
+                                           @if ($errors->has('outletEmail'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('outletEmail') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                 </div>
                                  <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{$errors->has('outletPhone') ? 'has-error': '' }}">
                                         <label>Phone</label>
-                                        <input type="number" max="10" id="outletPhone" name="outletPhone"  required class="form-control add-listing_form" max="9999999999">
+                                        <input type="number" id="outletPhone" name="outletPhone"  required class="form-control add-listing_form">
+                                           @if ($errors->has('outletPhone'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('outletPhone') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                 </div>
                             </div>
                              <div class="row">
                                 <div class="col-md-12">
-                                    <div class="custom-file">
+                                    <div class="custom-file {{$errors->has('bannerImg') ? 'has-error': '' }}">
                                         <div class="add-gallery-text">
                                             <h4>Add Your Banner Image Here</h4>
                                             <i class="ti-gallery"></i>
                                             <span>Drag &amp; Drop To Change Banner</span>
                                         </div>
                                         <input type="file" class="custom-file-input" id="bannerImg" name="bannerImg" required>
+                                           @if ($errors->has('bannerImg'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('bannerImg') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                 </div>
                             </div><br><br>
@@ -370,16 +492,26 @@
                                 </div>
                            
                                 <div class="col-md-4">
-                                    <div class="form-group">
+                                    <div class="form-group {{$errors->has('menuImg') ? 'has-error': '' }} ">
                                         <label><h6>Add your Menus</h6></label>
                                         <input type="file" id="menuImg" name="menuImg" required> 
+                                           @if ($errors->has('menuImg'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('menuImg') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                  </div>
 
                                  <div class="col-md-4">
-                                    <div class="form-group">
+                                    <div class="form-group {{$errors->has('avgCost') ? 'has-error': '' }} ">
                                         <label><h6>Avg Cost for 2</h6></label>
                                         <input type="number" id="avgCost" name="avgCost" required max="50000" /> 
+                                           @if ($errors->has('avgCost'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('avgCost') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                  </div>
                              </div>
@@ -398,12 +530,17 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="custom-file">
+                                    <div class="custom-file {{$errors->has('galleryImages') ? 'has-error': '' }}">
                                         <div class="add-gallery-text">
                                             <i class="ti-gallery"></i>
                                             <span>Drag &amp; Drop To Change Banner</span> 
                                         </div>
-                                        <input type="file" class="custom-file-input" id="galleryImages" multiple name="galleryImages" required>
+                                        <input type="file" class="custom-file-input" id="galleryImages" multiple min="2" max="5" name="galleryImages" required>
+                                           @if ($errors->has('galleryImages'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('galleryImages') }}</strong>
+                                    </span>
+                                @endif
                                     </div>
                                 </div>
                             </div>
@@ -415,110 +552,25 @@
                                 <h4>Tags</h4>
                                 <p>Tell us something more about your restaurant</p>
                             </div>
-                            <div class="row">
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i1" type="checkbox">
-                                        <label for="i1">Air Conditioned/label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i2" type="checkbox">
-                                        <label for="i2">Private Dinning Area Available</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i3" type="checkbox">
-                                        <label for="i3">Wifi</label>
-                                    </div>
-                                </div>
-                            </div>
+                                        
+                                          @for($i = 0; $i < count($tags); $i++) 
+                                                    @if($i%3 == 0)
+                                                         <div class="row">
+                                                     @endif       
 
-                            <div class="row">
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i4" type="checkbox">
-                                        <label for="i4">Serves Jain Food</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i5" type="checkbox">
-                                        <label for="i5">Brunch</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i6" type="checkbox">
-                                        <label for="i6">Desserts and Bakes</label>
-                                    </div>
-                                </div>
-                            </div>
+                                                 <div class="col-md-4 responsive-wrap">
+                                                    <div class="md-checkbox">
+                                                    <input id="{{$tags[$i]}}" name="tagsInputArray[]" value="{{$tags[$i]}}" type="checkbox">
+                                                    <label for="{{$tags[$i]}}">{{$tags[$i]}}</label>
+                                                     </div>
+                                                </div>
 
-                            <div class="row">
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i7" type="checkbox">
-                                        <label for="i7">Sports TV</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i8" type="checkbox">
-                                        <label for="i8">Street parking</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i9" type="checkbox">
-                                        <label for="i9">Rooftop</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i11" type="checkbox">
-                                        <label for="i11"> Wine</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i12" type="checkbox">
-                                        <label for="i12"> Beer  </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i13" type="checkbox">
-                                        <label for="i13">Birthday Special</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i14" type="checkbox">
-                                        <label for="i14">Party Room</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i15" type="checkbox">
-                                        <label for="i15">Accepts E-Wallet</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 responsive-wrap">
-                                    <div class="md-checkbox">
-                                        <input id="i16" type="checkbox">
-                                        <label for="i16">Daily Happy Hours</label>
-                                    </div>
-                                </div>
-                            </div>
+                                                @if($i%3 == 2)
+                                                    </div>
+                                                @endif        
+                                                    
+                                            @endfor
+                                   
                             <!--//End Amenities -->
 
                             <!-- Opening Hours -->
@@ -534,45 +586,30 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <select class="form-control">
-        <option selected>Opening Time</option>
-        <option>1 :00 AM</option>
-        <option>2 :00 AM</option>
-        <option>3 :00 AM</option>
-        <option>4 :00 AM</option>
-        <option>5 :00 AM</option>
-        <option>6 :00 AM</option>
-        <option>7 :00 AM</option>
-        <option>8 :00 AM</option>
-        <option>9 :00 AM</option>
-        <option>10 :00 AM</option>
-        <option>11 :00 AM</option>
-        <option>12 :00 AM</option>
-        <option>1 :00 PM</option>
-      </select>
+                                        <select class="form-control add-listing_form" required id="weekdayOpeningTime" name="weekdayOpeningTime">
+                                                <option value="" selected>Opening Time</option>
+                                                 @foreach ($timeHours as  $hour) 
+                                                    @foreach($timeMinutes as $min)
+                                                     <option value="{{$hour}} : {{$min}}">{{$hour}} : {{$min}}</option>
+                                                @endforeach
+                                                @endforeach
+                                          </select>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <select class="form-control">
-         <option selected>Closing Time</option>
-        <option>1 :00 AM</option>
-        <option>2 :00 AM</option>
-        <option>3 :00 AM</option>
-        <option>4 :00 AM</option>
-        <option>5 :00 AM</option>
-        <option>6 :00 AM</option>
-        <option>7 :00 AM</option>
-        <option>8 :00 AM</option>
-        <option>9 :00 AM</option>
-        <option>10 :00 AM</option>
-        <option>11 :00 AM</option>
-        <option>12 :00 AM</option>
-        <option>1 :00 PM</option>
-      </select>
+                                        <select class="form-control add-listing_form" required id="weekdayClosingTime" name="weekdayClosingTime">
+                                             <option value="" selected>Closing Time</option>
+                                              @foreach ($timeHours as  $hour) 
+                                                    @foreach($timeMinutes as $min)
+                                                     <option value="{{$hour}} : {{$min}}">{{$hour}} : {{$min}}</option>
+                                                @endforeach
+                                                @endforeach
+                                         </select>
                                     </div>
                                 </div>
                             </div>
+
 
                             <div class="row">
                                 <div class="col-md-2">
@@ -580,42 +617,27 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <select class="form-control">
-        <option selected>Opening Time</option>
-        <option>1 :00 AM</option>
-        <option>2 :00 AM</option>
-        <option>3 :00 AM</option>
-        <option>4 :00 AM</option>
-        <option>5 :00 AM</option>
-        <option>6 :00 AM</option>
-        <option>7 :00 AM</option>
-        <option>8 :00 AM</option>
-        <option>9 :00 AM</option>
-        <option>10 :00 AM</option>
-        <option>11 :00 AM</option>
-        <option>12 :00 AM</option>
-        <option>1 :00 PM</option>
-      </select>
+                                        <select class="form-control add-listing_form" required id="weekendOpeningTime" name="weekendOpeningTime">
+                                              <option value="" selected>Opening Time</option>
+                                                 @foreach ($timeHours as  $hour) 
+                                                    @foreach($timeMinutes as $min)
+                                                     <option value="{{$hour}} : {{$min}}">{{$hour}} : {{$min}}</option>
+                                                @endforeach
+                                                @endforeach
+        
+                                          </select>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <select class="form-control">
-         <option selected>Closing Time</option>
-        <option>1 :00 AM</option>
-        <option>2 :00 AM</option>
-        <option>3 :00 AM</option>
-        <option>4 :00 AM</option>
-        <option>5 :00 AM</option>
-        <option>6 :00 AM</option>
-        <option>7 :00 AM</option>
-        <option>8 :00 AM</option>
-        <option>9 :00 AM</option>
-        <option>10 :00 AM</option>
-        <option>11 :00 AM</option>
-        <option>12 :00 AM</option>
-        <option>1 :00 PM</option>
-      </select>
+                                        <select class="form-control add-listing_form" required id="weekendClosingTime" name="weekendClosingTime">
+                                             <option value="" selected>Closing Time</option>
+                                                  @foreach ($timeHours as  $hour) 
+                                                    @foreach($timeMinutes as $min)
+                                                     <option value="{{$hour}} : {{$min}}">{{$hour}} : {{$min}}</option>
+                                                @endforeach
+                                                @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -623,7 +645,9 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="btn-wrap btn-wrap2">
-                                        <a href="#" class="btn btn-simple">SUBMIT LISTING</a>
+                                        <button type="submit"  class="btn btn-simple">
+                                            SUBMIT
+                                         </button>
                                     </div>
                                 </div>
                             </div>
@@ -643,7 +667,7 @@
                 <div class="col-md-4 responsive-wrap">
                     <div class="location">
                         <i class="fa fa-map-marker" aria-hidden="true"></i>
-                        <p>503 Sylvan Ave, Mountain View<br> CA 94041, United States</p>
+                        <p>A/202, Risha Apt, Patel Nagar<br> Bhayandar (west), Mumbai-401101</p>
                     </div>
                 </div>
                 <div class="col-md-4 responsive-wrap">
